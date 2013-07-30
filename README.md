@@ -6,15 +6,9 @@ Easily produce metrics that can be consumed by [l2met](https://github.com/ryando
 
 Add this line to your application's Gemfile:
 
-    gem 'formatted-metrics'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install formatted-metrics
+```ruby
+gem 'formatted-metrics'
+```
 
 ## Usage
 
