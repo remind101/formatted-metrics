@@ -31,17 +31,14 @@ Include the gem then call `Metrics.setup` when you app boots.
 Use `Metrics.instrument` to instrument events to STDOUT.
 
 ```ruby
-# Instrument the duration of an event.
 Metrics.instrument 'rack.request' do
   @app.call(env)
 end
 # => 'source=app measure.rack.request=50ms'
 
-# Instrument a specific value.
 Metrics.instrument 'workers.busy', 10, units: 'workers'
 # => 'source=app measure.workers.busy=10workers'
 
-# Instrument something with a specific source.
 Metrics.instrument 'sidekiq.queue', source: 'background' do
   yield
 end
