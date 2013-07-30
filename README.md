@@ -1,5 +1,7 @@
 # Formatted Metrics
 
+[![Build Status](https://travis-ci.org/remind101/formatted-metrics.png)](https://travis-ci.org/remind101/formatted-metrics)
+
 Easily produce metrics that can be consumed by [l2met](https://github.com/ryandotsmith/l2met).
 
 ## Installation
