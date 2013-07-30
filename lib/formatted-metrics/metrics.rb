@@ -51,7 +51,7 @@ module Metrics
     # Returns nothing.
     def subscribe
       ActiveSupport::Notifications.subscribe /.*/ do |*args|
-        Handler.handle(*args)
+        Metrics::Handler.new(*args).handle
       end
     end
 

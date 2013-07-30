@@ -1,6 +1,6 @@
 module Metrics
   class Railtie < ::Rails::Railtie
-    config.after_initialize do
+    initializer 'metrics.subscribe' do
       Metrics.subscribe
     end
   end
