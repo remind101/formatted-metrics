@@ -10,6 +10,7 @@ module Metrics
   autoload :Configuration
   autoload :Handler
   autoload :Formatter
+  autoload :Instrumentable
 
   class << self
 
