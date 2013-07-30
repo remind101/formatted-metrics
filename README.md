@@ -14,11 +14,11 @@ gem 'formatted-metrics'
 
 ### Rails
 
-Include the gem, then instrument things you want to measure:
+You're done!
 
 ### Rack
 
-Include the gem then call `Metrics.setup` when you app boots.
+Call `Metrics.setup` when you app boots.
 
 ### Instrument
 
