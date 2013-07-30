@@ -42,6 +42,7 @@ end
 ## TODO
 
 * Add Rack middleware for outputting rack performance metrics.
+* Instrument some default rails stuff.
 
 ## Contributing
 
