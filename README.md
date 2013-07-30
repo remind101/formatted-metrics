@@ -45,6 +45,10 @@ end
 # => 'source=app.background measure.sidekiq.queue=500ms'
 ```
 
+## TODO
+
+* Add Rack middleware for outputting rack performance metrics.
+
 ## Contributing
 
 1. Fork it
