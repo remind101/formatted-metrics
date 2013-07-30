@@ -56,7 +56,7 @@ module Metrics
     end
 
     def configuration
-      @configuration || Configuration.new
+      @configuration ||= Configuration.new
     end
 
     def configure
