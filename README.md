@@ -1,6 +1,6 @@
-# Formatted::Metrics
+# Formatted Metrics
 
-TODO: Write a gem description
+Easily produce metrics that can be consumed by [l2met](https://github.com/ryandotsmith/l2met).
 
 ## Installation
 
@@ -18,7 +18,35 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Rails
+
+Include the gem, then instrument things you want to measure:
+
+### Rack
+
+Include the gem then call `Metrics.setup` when you app boots.
+
+### Instrument
+
+Use `Metrics.instrument` to instrument events to STDOUT.
+
+```ruby
+# Instrument the duration of an event.
+Metrics.instrument 'rack.request' do
+  @app.call(env)
+end
+# => 'source=app measure.rack.request=50ms'
+
+# Instrument a specific value.
+Metrics.instrument 'workers.busy', 10, units: 'workers'
+# => 'source=app measure.workers.busy=10workers'
+
+# Instrument something with a specific source.
+Metrics.instrument 'sidekiq.queue', source: 'background' do
+  yield
+end
+# => 'source=app.background measure.sidekiq.queue=500ms'
+```
 
 ## Contributing
 

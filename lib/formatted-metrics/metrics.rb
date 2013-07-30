@@ -26,7 +26,7 @@ module Metrics
     #   Metrics.instrument 'workers.busy', 10, units: 'workers'
     #
     #   # Instrument something with a specific source.
-    #   Metrics.instrument 'sidekiq.queue', source: queue_name do
+    #   Metrics.instrument 'sidekiq.queue', source: 'background' do
     #     yield
     #   end
     #
