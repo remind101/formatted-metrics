@@ -1,12 +1,15 @@
 require 'active_support/notifications'
 require 'active_support/core_ext/array/extract_options'
+require 'active_support/dependencies/autoload'
 
 require 'metrics/railtie' if defined?(Rails)
 
 module Metrics
-  autoload :Configuration, 'metrics/configuration'
-  autoload :Handler,       'metrics/handler'
-  autoload :Formatter,     'metrics/formatter'
+  extend ActiveSupport::Autoload
+
+  autoload :Configuration
+  autoload :Handler
+  autoload :Formatter
 
   class << self
 
