@@ -31,5 +31,12 @@ describe Metrics do
         Metrics.instrument 'rack.request', 10, source: 'foo'
       end
     end
+
+    context 'with empty no block and no measurement' do
+      it 'instruments with a measurement of 1' do
+        instrumenter.should_receive(:instrument).with('exception', measure: 1, source: nil)
+        Metrics.instrument 'exception'
+      end
+    end
   end
 end
