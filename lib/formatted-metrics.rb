@@ -1,1 +1,1 @@
-require 'formatted-metrics/metrics'
+require 'metrics'
