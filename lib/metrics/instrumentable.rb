@@ -55,6 +55,7 @@ module Metrics
       # Returns nothing.
       def instrument(*methods)
         methods.each do |name|
+          visibility = %w[public private protected].find { |visibility| send :"#{visibility}_method_defined?", name }
           method = instance_method(name)
           define_method name do |*args, &block|
             method = method.bind(self)
@@ -62,6 +63,7 @@ module Metrics
               method.call(*args, &block)
             end
           end
+          send visibility, name
         end
       end
 
