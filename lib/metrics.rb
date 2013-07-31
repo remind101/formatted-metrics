@@ -36,11 +36,13 @@ module Metrics
     # Returns nothing.
     def instrument(metric, *args, &block)
       options = args.extract_options!
+
       measure = if args.empty?
         block_given? ? true : 1
       else
         args.first
       end
+
       ActiveSupport::Notifications.instrument(
         metric,
         options.merge(measure: measure, source: options[:source]),
