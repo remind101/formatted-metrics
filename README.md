@@ -20,7 +20,7 @@ You're done!
 
 ### Rack
 
-Call `Metrics.setup` when you app boots.
+Call `Metrics.subscribe` when your app boots.
 
 ### Instrument
 

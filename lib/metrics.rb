@@ -37,10 +37,11 @@ module Metrics
     def instrument(metric, *args, &block)
       options = args.extract_options!
       measure = !args.empty? ? args.first : true
-      ActiveSupport::Notifications.instrument \
+      ActiveSupport::Notifications.instrument(
         metric,
         options.merge(measure: measure, source: options[:source]),
         &block
+      )
     end
 
     # Public: Subscribe to all ActiveSupport::Notifications events. Only events
