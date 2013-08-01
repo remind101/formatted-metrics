@@ -7,8 +7,8 @@ module Metrics
     # Public: See Metrics.instrument.
     #
     # Returns nothing.
-    def instrument(*args)
-      Metrics.instrument(*args)
+    def instrument(*args, &block)
+      Metrics.instrument(*args, &block)
     end
 
     module ClassMethods
@@ -58,9 +58,9 @@ module Metrics
           visibility = %w[public private protected].find { |visibility| send :"#{visibility}_method_defined?", name }
           method = instance_method(name)
           define_method name do |*args, &block|
-            method = method.bind(self)
+            bound_method = method.bind(self)
             instrument [self.class.metric_namespace, name].join('.') do
-              method.call(*args, &block)
+              bound_method.call(*args, &block)
             end
           end
           send visibility, name
