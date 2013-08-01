@@ -27,7 +27,7 @@ module Metrics
     end
 
     def log
-      configuration.stream.puts configuration.formatter.new(event).to_s
+      configuration.logger.info configuration.formatter.new(event).to_s
     end
 
   end

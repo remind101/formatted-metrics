@@ -1,7 +1,9 @@
+require 'logger'
+
 module Metrics
   class Configuration
     # The stream source to write to. Defaults to STDOUT.
-    attr_accessor :stream
+    attr_accessor :logger
 
     # The base source for all metrics.
     attr_accessor :source
@@ -10,8 +12,8 @@ module Metrics
     # Defaults to Metrics::Formatter.
     attr_accessor :formatter
 
-    def stream
-      @stream ||= STDOUT
+    def logger
+      @logger ||= Logger.new(STDOUT)
     end
 
     def source

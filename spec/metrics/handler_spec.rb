@@ -19,7 +19,7 @@ describe Metrics::Handler do
       end
 
       it 'should handle the event' do
-        Metrics.configuration.stream.should_receive(:puts).with(formatter.to_s)
+        Metrics.configuration.logger.should_receive(:info).with(formatter.to_s)
         handler.handle
       end
     end
@@ -30,7 +30,7 @@ describe Metrics::Handler do
       end
 
       it 'should not handle the event' do
-        Metrics.configuration.stream.should_receive(:puts).never
+        Metrics.configuration.logger.should_receive(:info).never
         handler.handle
       end
     end
