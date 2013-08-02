@@ -1,4 +1,3 @@
-require 'active_support/notifications'
 require 'active_support/core_ext/array/extract_options'
 require 'active_support/dependencies/autoload'
 
@@ -8,9 +7,17 @@ module Metrics
   extend ActiveSupport::Autoload
 
   autoload :Configuration
-  autoload :Handler
-  autoload :Formatter
   autoload :Instrumentable
+  autoload :Instrumenter
+  autoload :Grouping
+  autoload :Handler
+
+  module Formatters
+    extend ActiveSupport::Autoload
+
+    autoload :Base
+    autoload :L2Met
+  end
 
   class << self
 
@@ -35,35 +42,12 @@ module Metrics
     #   end
     #
     # Returns nothing.
-    def instrument(metric, *args, &block)
-      options = args.extract_options!
-
-      measure = if args.empty?
-        block_given? ? true : 1
-      else
-        args.first
-      end
-
-      ActiveSupport::Notifications.instrument(
-        metric,
-        options.merge(measure: measure, source: options[:source]),
-        &block
-      )
+    def instrument(*args, &block)
+      Handler.handle(Instrumenter.instrument(*args, &block))
     end
 
-    # Public: Subscribe to all ActiveSupport::Notifications events. Only events
-    # that have a payload with a :measure key that is truthy will be processed
-    # and logged to stdout.
-    #
-    # Example
-    #
-    #   Metrics.setup
-    #
-    # Returns nothing.
-    def subscribe
-      ActiveSupport::Notifications.subscribe /.*/ do |*args|
-        Metrics::Handler.new(*args).handle
-      end
+    def group(*args, &block)
+      Handler.handle(Grouping.instrument(*args, &block))
     end
 
     def configuration

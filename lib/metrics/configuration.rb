@@ -1,4 +1,5 @@
 require 'logger'
+require 'active_support/core_ext/string/inflections'
 
 module Metrics
   class Configuration
@@ -25,7 +26,7 @@ module Metrics
     end
 
     def formatter
-      @formatter ||= Metrics::Formatter
+      @formatter ||= Metrics::Formatters::L2Met
     end
   end
 end

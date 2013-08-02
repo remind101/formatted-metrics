@@ -1,35 +1,32 @@
-require 'active_support/core_ext/module/delegation'
-
 module Metrics
-
-  # Internal: Responsible for handling an ActiveSupport::Notifications message.
   class Handler
-    attr_reader :args
+    attr_reader :instrumenters
 
-    def initialize(*args)
-      @args = args
+    def self.handle(*instrumenters)
+      new(*instrumenters).handle
+    end
+
+    def initialize(*instrumenters)
+      @instrumenters = instrumenters.flatten
     end
 
     def handle
-      log if trackable?
+      write instrumenters
     end
 
   private
 
-    delegate :configuration, to: :'Metrics'
-
-    def trackable?
-      event.payload[:measure]
+    def configuration
+      Metrics.configuration
     end
 
-    def event
-      @event ||= ActiveSupport::Notifications::Event.new(*args)
+    def write(*args, &block)
+      formatter.write(*args, &block)
     end
 
-    def log
-      configuration.logger.info configuration.formatter.new(event).to_s
+    def formatter
+      configuration.formatter
     end
-
+  
   end
-
 end

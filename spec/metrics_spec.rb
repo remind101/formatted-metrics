@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Metrics do
   let(:instrumenter) { ActiveSupport::Notifications }
 
-  describe '#instrument' do
+  pending '#instrument' do
     context 'with a block' do
       it 'instruments the duration' do
         instrumenter.should_receive(:instrument).with('rack.request', measure: true, source: nil)
