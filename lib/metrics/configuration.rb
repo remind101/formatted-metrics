@@ -14,7 +14,7 @@ module Metrics
 
     def logger
       @logger ||= Logger.new(STDOUT).tap do |log|
-        log.formatter = proc { |severity, datetime, progname, msg| msg }
+        log.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
       end
     end
 
