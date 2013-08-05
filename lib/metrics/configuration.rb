@@ -13,7 +13,9 @@ module Metrics
     attr_accessor :formatter
 
     def logger
-      @logger ||= Logger.new(STDOUT)
+      @logger ||= Logger.new(STDOUT).tap do |log|
+        log.formatter = proc { |severity, datetime, progname, msg| msg }
+      end
     end
 
     def source
