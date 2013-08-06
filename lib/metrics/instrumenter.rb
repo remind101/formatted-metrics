@@ -17,7 +17,7 @@ module Metrics
 
     def initialize(metric, *args, &block)
       @metric  = metric
-      @options = args.extract_options!
+      @options = extract_options!(args)
       @block   = block
       @value   = args.first if args.length > 0
     end
@@ -50,6 +50,14 @@ module Metrics
         start = Time.now
         block.call
         (Time.now - start) * 1000.0
+      end
+    end
+
+    def extract_options!(options)
+      if options.last.is_a?(Hash)
+        options.pop
+      else
+        {}
       end
     end
   end

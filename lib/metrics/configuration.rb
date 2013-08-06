@@ -1,5 +1,4 @@
 require 'logger'
-require 'active_support/core_ext/string/inflections'
 
 module Metrics
   class Configuration
@@ -22,7 +21,7 @@ module Metrics
     end
 
     def source
-      @source ||= ENV['METRICS_SOURCE'] || ENV['APP_NAME'] || `hostname`.chomp.underscore
+      @source ||= ENV['METRICS_SOURCE'] || ENV['APP_NAME'] || `hostname`.chomp
     end
 
     def formatter

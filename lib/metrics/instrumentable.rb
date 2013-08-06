@@ -1,8 +1,9 @@
-require 'active_support/concern'
-
 module Metrics
   module Instrumentable
-    extend ActiveSupport::Concern
+
+    def self.included(base)
+      base.extend ClassMethods
+    end
 
     # Public: See Metrics.instrument.
     #

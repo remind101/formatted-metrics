@@ -1,22 +1,15 @@
-require 'active_support/core_ext/array/extract_options'
-require 'active_support/dependencies/autoload'
-
 require 'metrics/railtie' if defined?(Rails)
 
 module Metrics
-  extend ActiveSupport::Autoload
-
-  autoload :Configuration
-  autoload :Instrumentable
-  autoload :Instrumenter
-  autoload :Grouping
-  autoload :Handler
+  autoload :Configuration,  'metrics/configuration'
+  autoload :Instrumentable, 'metrics/instrumentable'
+  autoload :Instrumenter,   'metrics/instrumenter'
+  autoload :Grouping,       'metrics/grouping'
+  autoload :Handler,        'metrics/handler'
 
   module Formatters
-    extend ActiveSupport::Autoload
-
-    autoload :Base
-    autoload :L2Met
+    autoload :Base,         'metrics/formatters/base'
+    autoload :L2Met,        'metrics/formatters/l2met'
   end
 
   class << self
