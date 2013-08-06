@@ -16,9 +16,6 @@ module Metrics
 
     # Public: Instrument a metric.
     #
-    # metric - The name of the metric (e.g. rack.request)
-    # source - A source to append to the default source.
-    #
     # Example
     #
     #   # Instrument the duration of an event.
@@ -39,6 +36,22 @@ module Metrics
       Handler.handle(Instrumenter.instrument(*args, &block))
     end
 
+    # Public: Group multiple instruments.
+    #
+    # Example
+    #
+    #   Metrics.group 'sidekiq' do
+    #     instrument 'request.time' do
+    #       begin
+    #         @app.call(env)
+    #       rescue Exception => e
+    #         instrument 'exceptions', 1
+    #         raise
+    #       end
+    #     end
+    #   end
+    #
+    # Returns nothing.
     def group(*args, &block)
       Handler.handle(Grouping.instrument(*args, &block))
     end

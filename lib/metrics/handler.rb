@@ -1,4 +1,7 @@
 module Metrics
+
+  # Internal: Responsible for taking a list or an Array of
+  # Metrics::Instrumenters and passing them to the formatter.
   class Handler
     attr_reader :instrumenters
 
@@ -10,6 +13,9 @@ module Metrics
       @instrumenters = instrumenters.flatten
     end
 
+    # Public: Writes all of the instrumenters to STDOUT using the formatter.
+    #
+    # Returns an Array of Metrics::Instrumenters that were written to STDOUT.
     def handle
       write instrumenters
     end

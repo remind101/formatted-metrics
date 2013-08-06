@@ -1,4 +1,6 @@
 module Metrics
+  # Public: Starts a new Grouping context, which allows for multiple
+  # instruments to output on a single line.
   class Grouping
     attr_reader :namespace, :instrumenters
     
