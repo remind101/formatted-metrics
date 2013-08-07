@@ -11,7 +11,7 @@ module Metrics
     def initialize(namespace = nil, &block)
       @instrumenters = []
       @namespace     = namespace
-      instance_eval &block
+      block.call(self)
     end
 
     def instrument(metric, *args, &block)
