@@ -21,11 +21,11 @@ module Metrics
     end
 
     def source
-      @source ||= ENV['METRICS_SOURCE'] || ENV['APP_NAME'] || `hostname`.chomp.underscore
+      @source ||= ENV['METRICS_SOURCE'] || ENV['APP_NAME'] || `hostname`.chomp
     end
 
     def formatter
-      @formatter ||= Metrics::Formatter
+      @formatter ||= Metrics::Formatters::L2Met
     end
   end
 end

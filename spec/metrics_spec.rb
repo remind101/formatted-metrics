@@ -1,42 +1,21 @@
 require 'spec_helper'
 
 describe Metrics do
-  let(:instrumenter) { ActiveSupport::Notifications }
-
   describe '#instrument' do
-    context 'with a block' do
-      it 'instruments the duration' do
-        instrumenter.should_receive(:instrument).with('rack.request', measure: true, source: nil)
-        Metrics.instrument 'rack.request' do
-          'foo'
-        end
-      end
-
-      it 'instruments the duration with a source' do
-        instrumenter.should_receive(:instrument).with('rack.request', measure: true, source: 'foo')
-        Metrics.instrument 'rack.request', source: 'foo' do
-          'do something long'
-        end
-      end
+    it 'delegates to Metrics::Instrumenter' do
+      instrumenter = double Metrics::Instrumenter
+      Metrics::Instrumenter.should_receive(:instrument).with('rack.request', 10).and_return(instrumenter)
+      Metrics::Handler.should_receive(:handle).with(instrumenter)
+      Metrics.instrument 'rack.request', 10
     end
+  end
 
-    context 'with a measurement' do
-      it 'instruments the measurement' do
-        instrumenter.should_receive(:instrument).with('rack.request', measure: 10, source: nil)
-        Metrics.instrument 'rack.request', 10
-      end
-
-      it 'instruments the measurement with a source' do
-        instrumenter.should_receive(:instrument).with('rack.request', measure: 10, source: 'foo')
-        Metrics.instrument 'rack.request', 10, source: 'foo'
-      end
-    end
-
-    context 'with empty no block and no measurement' do
-      it 'instruments with a measurement of 1' do
-        instrumenter.should_receive(:instrument).with('exception', measure: 1, source: nil)
-        Metrics.instrument 'exception'
-      end
+  describe '#group' do
+    it 'delegates to Metrics::Grouping' do
+      grouping = double Metrics::Grouping
+      Metrics::Grouping.should_receive(:instrument).and_return(grouping)
+      Metrics::Handler.should_receive(:handle).with(grouping)
+      Metrics.group { instrument 'rack.request', 10 }
     end
   end
 end

@@ -1,23 +1,20 @@
-require 'active_support/notifications'
-require 'active_support/core_ext/array/extract_options'
-require 'active_support/dependencies/autoload'
-
 require 'metrics/railtie' if defined?(Rails)
 
 module Metrics
-  extend ActiveSupport::Autoload
+  autoload :Configuration,  'metrics/configuration'
+  autoload :Instrumentable, 'metrics/instrumentable'
+  autoload :Instrumenter,   'metrics/instrumenter'
+  autoload :Grouping,       'metrics/grouping'
+  autoload :Handler,        'metrics/handler'
 
-  autoload :Configuration
-  autoload :Handler
-  autoload :Formatter
-  autoload :Instrumentable
+  module Formatters
+    autoload :Base,         'metrics/formatters/base'
+    autoload :L2Met,        'metrics/formatters/l2met'
+  end
 
   class << self
 
     # Public: Instrument a metric.
-    #
-    # metric - The name of the metric (e.g. rack.request)
-    # source - A source to append to the default source.
     #
     # Example
     #
@@ -35,35 +32,28 @@ module Metrics
     #   end
     #
     # Returns nothing.
-    def instrument(metric, *args, &block)
-      options = args.extract_options!
-
-      measure = if args.empty?
-        block_given? ? true : 1
-      else
-        args.first
-      end
-
-      ActiveSupport::Notifications.instrument(
-        metric,
-        options.merge(measure: measure, source: options[:source]),
-        &block
-      )
+    def instrument(*args, &block)
+      Handler.handle(Instrumenter.instrument(*args, &block))
     end
 
-    # Public: Subscribe to all ActiveSupport::Notifications events. Only events
-    # that have a payload with a :measure key that is truthy will be processed
-    # and logged to stdout.
+    # Public: Group multiple instruments.
     #
     # Example
     #
-    #   Metrics.setup
+    #   Metrics.group 'sidekiq' do
+    #     instrument 'request.time' do
+    #       begin
+    #         @app.call(env)
+    #       rescue Exception => e
+    #         instrument 'exceptions', 1
+    #         raise
+    #       end
+    #     end
+    #   end
     #
     # Returns nothing.
-    def subscribe
-      ActiveSupport::Notifications.subscribe /.*/ do |*args|
-        Metrics::Handler.new(*args).handle
-      end
+    def group(*args, &block)
+      Handler.handle(Grouping.instrument(*args, &block))
     end
 
     def configuration

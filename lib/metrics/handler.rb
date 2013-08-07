@@ -1,35 +1,38 @@
-require 'active_support/core_ext/module/delegation'
-
 module Metrics
 
-  # Internal: Responsible for handling an ActiveSupport::Notifications message.
+  # Internal: Responsible for taking a list or an Array of
+  # Metrics::Instrumenters and passing them to the formatter.
   class Handler
-    attr_reader :args
+    attr_reader :instrumenters
 
-    def initialize(*args)
-      @args = args
+    def self.handle(*instrumenters)
+      new(*instrumenters).handle
     end
 
+    def initialize(*instrumenters)
+      @instrumenters = instrumenters.flatten
+    end
+
+    # Public: Writes all of the instrumenters to STDOUT using the formatter.
+    #
+    # Returns an Array of Metrics::Instrumenters that were written to STDOUT.
     def handle
-      log if trackable?
+      write instrumenters
     end
 
   private
 
-    delegate :configuration, to: :'Metrics'
-
-    def trackable?
-      event.payload[:measure]
+    def configuration
+      Metrics.configuration
     end
 
-    def event
-      @event ||= ActiveSupport::Notifications::Event.new(*args)
+    def write(*args, &block)
+      formatter.write(*args, &block)
     end
 
-    def log
-      configuration.logger.info configuration.formatter.new(event).to_s
+    def formatter
+      configuration.formatter
     end
-
+  
   end
-
 end
