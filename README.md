@@ -40,11 +40,11 @@ Metrics.instrument 'sidekiq.queue', source: 'background' do
 end
 # => 'source=app.background measure.sidekiq.queue=500ms'
 
-Metrics.group 'sidekiq' do
-  instrument 'queues.process', 100, units: 'jobs'
-  instrument 'workers.busy', 10, units: 'workers'
+Metrics.group 'sidekiq' do |group|
+  group.instrument 'queues.process', 100, units: 'jobs'
+  group.instrument 'workers.busy', 10, units: 'workers'
 
-  instrument 'queue.time', source: 'worker.1' do
+  group.instrument 'queue.time', source: 'worker.1' do
     sleep 1
   end
 end

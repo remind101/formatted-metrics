@@ -56,6 +56,10 @@ module Metrics
       Handler.handle(Grouping.instrument(*args, &block))
     end
 
+    def subscribe
+      $stderr.puts "Metrics#subscribe is deprecated and will be removed in 1.0."
+    end
+
     def configuration
       @configuration ||= Configuration.new
     end
