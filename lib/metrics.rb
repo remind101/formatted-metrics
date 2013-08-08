@@ -40,8 +40,8 @@ module Metrics
     #
     # Example
     #
-    #   Metrics.group 'sidekiq' do
-    #     instrument 'request.time' do
+    #   Metrics.group 'sidekiq' do |group|
+    #     group.instrument 'request.time' do
     #       begin
     #         @app.call(env)
     #       rescue Exception => e
