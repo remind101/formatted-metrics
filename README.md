@@ -14,13 +14,13 @@ gem 'formatted-metrics'
 
 ## Usage
 
-### Rails
-
-You're done!
-
 ### Rack
 
-Call `Metrics.subscribe` when your app boots.
+If you want to instrument rack request times:
+
+```
+use Rack::Instrumentation
+```
 
 ### Instrument
 
