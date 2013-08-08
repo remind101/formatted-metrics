@@ -1,3 +1,4 @@
+require 'rack/instrumentation'
 require 'metrics/railtie' if defined?(Rails)
 
 module Metrics
