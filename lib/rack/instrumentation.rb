@@ -14,8 +14,7 @@ module Rack
 
         response
       rescue Exception => raised
-        instrument 'exception', 1
-        instrument 'exception.rack', 1
+        instrument 'exception', 1, source: 'rack'
         raise
       end
     end
