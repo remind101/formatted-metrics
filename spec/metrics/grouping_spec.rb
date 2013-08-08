@@ -18,5 +18,25 @@ describe Metrics::Grouping do
 
       expect(group.instrumenters.first.metric).to eq 'rack.request.time'
     end
+
+    it 'allows for nested groups' do
+      group = described_class.new 'rack' do |group|
+        group.group do |g|
+          g.instrument 'request.time', 500, units: 'ms'
+        end
+      end
+
+      expect(group.instrumenters.first.metric).to eq 'rack.request.time'
+    end
+
+    it 'allows for nested groups with namespaces' do
+      group = described_class.new 'rack' do |group|
+        group.group 'request' do |g|
+          g.instrument 'time', 500, units: 'ms'
+        end
+      end
+
+      expect(group.instrumenters.first.metric).to eq 'rack.request.time'
+    end
   end
 end

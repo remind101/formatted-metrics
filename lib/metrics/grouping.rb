@@ -14,9 +14,18 @@ module Metrics
       block.call(self)
     end
 
+    def increment(metric)
+      instrument metric, 1
+    end
+
     def instrument(metric, *args, &block)
       metric = "#{namespace}.#{metric}" if namespace
-      instrumenters << Instrumenter.instrument(metric, *args, &block)
+      instrumenters.push(Instrumenter.instrument(metric, *args, &block))
+    end
+
+    def group(nested_namespace = nil, &block)
+      ns = nested_namespace ? "#{namespace}.#{nested_namespace}" : namespace
+      instrumenters.push(*Grouping.instrument(ns, &block))
     end
   end
 end
