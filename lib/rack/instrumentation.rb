@@ -6,6 +6,8 @@ module Rack
   
     def call(env)
       begin
+        header_metrics env
+
         time     = Time.now
         response = @app.call(env)
         duration = (Time.now - time) * 1000.0
@@ -22,13 +24,9 @@ module Rack
   private
 
     def header_metrics(env)
-      return unless env.keys.include?('HTTP_X_HEROKU_QUEUE_DEPTH')
+      return unless env.keys.include?('HTTP_X_HEROKU_QUEUE_WAIT_TIME')
 
-      group 'rack.heroku.queue' do |group|
-        group.instrument 'depth',     env['HTTP_X_HEROKU_QUEUE_DEPTH'].to_f
-        group.instrument 'wait_time', env['HTTP_X_HEROKU_QUEUE_WAIT_TIME'].to_f, units: 'ms'
-        group.instrument 'dynos',     env['HTTP_X_HEROKU_DYNOS_IN_USE'].to_f,    units: 'dynos'
-      end
+      instrument 'rack.heroku.queue.wait_time', env['HTTP_X_HEROKU_QUEUE_WAIT_TIME'].to_f, units: 'ms'
     end
 
     def request_metrics(status, duration)

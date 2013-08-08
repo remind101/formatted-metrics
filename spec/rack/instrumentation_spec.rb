@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Rack::Instrumentation do
-  let(:app           ) { double 'app' }
+  let(:app           ) { double 'app', call: response }
   let(:env           ) { Hash.new }
   let(:response      ) { [200, {}, []] }
   subject(:middleware) { described_class.new app }
@@ -11,6 +11,11 @@ describe Rack::Instrumentation do
       it 'calls the app' do
         app.should_receive(:call).and_return(response)
         expect(middleware.call(env)).to eq response
+      end
+
+      it 'reports heroku queue time' do
+        env['HTTP_X_HEROKU_QUEUE_WAIT_TIME'] = '36'
+        middleware.call(env)
       end
     end
 
