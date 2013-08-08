@@ -18,9 +18,14 @@ module Metrics
     # Returns an Array of Metrics::Instrumenters that were written to STDOUT.
     def handle
       write instrumenters
+      result
     end
 
   private
+
+    def result
+      instrumenters.last.result
+    end
 
     def configuration
       Metrics.configuration

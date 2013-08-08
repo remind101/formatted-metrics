@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Metrics::Instrumenter do
-  let(:instrumenter) { described_class.new('rack.request') { } }
+  let(:instrumenter) { described_class.new('rack.request') { 'foo' } }
 
   describe '.value' do
     subject { instrumenter.value }
@@ -40,6 +40,19 @@ describe Metrics::Instrumenter do
     context 'when specified' do
       let(:instrumenter) { described_class.new('jobs.busy', 10, units: 'jobs', source: 'sidekiq') }
       it { should eq 'sidekiq' }
+    end
+  end
+
+  describe '.result' do
+    subject { instrumenter.result }
+
+    context 'with a block' do
+      it { should eq 'foo' }
+    end
+
+    context 'with a value' do
+      let(:instrumenter) { described_class.new('jobs.busy', 10, units: 'jobs') }
+      it { should be_nil }
     end
   end
 end

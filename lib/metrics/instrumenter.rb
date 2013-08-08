@@ -38,6 +38,11 @@ module Metrics
       options[:source]
     end
 
+    def result
+      return nil unless block
+      @result ||= block.call
+    end
+
   private
     attr_reader :options, :block
 
@@ -48,7 +53,7 @@ module Metrics
     def time
       @time ||= begin
         start = Time.now
-        block.call
+        result
         (Time.now - start) * 1000.0
       end
     end
