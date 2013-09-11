@@ -1,7 +1,11 @@
 module Metrics
   # Public: Responsible for sampling a measurement of something.
   #
-  # metric - The name of the metric to measure (e.g. rack.request.time)
+  # metric  - The name of the metric to measure (e.g. rack.request.time)
+  # options - Hash of options (default:  {}):
+  #           unit: Unit of measurement [ms, MB, GB, ...] (optional)
+  #           type: Method type of the measurement [measure, sample, count]
+  #                 (optional, default: measure)
   #
   # Returns a new Metrics::Instrumenter.
   class Instrumenter
@@ -32,6 +36,10 @@ module Metrics
 
     def units
       timing? ? TIME_UNITS : options[:units]
+    end
+
+    def type
+      options[:type] || 'measure'
     end
 
     def source
