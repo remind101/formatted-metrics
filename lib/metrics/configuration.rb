@@ -21,7 +21,8 @@ module Metrics
     end
 
     def source
-      @source ||= ENV['METRICS_SOURCE'] || ENV['APP_NAME'] || `hostname`.chomp
+      return @source if defined? @source
+      @source = ENV['METRICS_SOURCE'] || ENV['APP_NAME'] || `hostname`.chomp
     end
 
     def formatter
