@@ -22,17 +22,17 @@ module Metrics::Formatters
     end
 
     def full_source(source=nil)
-      if source
-        [configuration.source, source].join('.')
-      else
-        configuration.source
-      end
+      [configuration.source, source].reject { |s| blank?(s) }.join('.')
     end
 
     def measurement(instrumenter)
       value = instrumenter.value
       value = value.round(PRECISION) if value.is_a?(Float)
       "#{instrumenter.type}##{instrumenter.metric}=#{value}#{instrumenter.units}"
+    end
+
+    def blank?(string)
+      string.nil? || string.empty?
     end
   end
 end
