@@ -15,7 +15,7 @@ module Metrics
     end
 
     def increment(metric)
-      instrument metric, 1
+      instrument metric, 1, type: 'count'
     end
 
     def instrument(metric, *args, &block)
