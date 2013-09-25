@@ -48,7 +48,8 @@ module Metrics
 
     def result
       return nil unless block
-      @result ||= block.call
+      return @result if defined?(@result)
+      @result = block.call
     end
 
   private
