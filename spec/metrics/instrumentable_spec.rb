@@ -6,7 +6,7 @@ describe Metrics::Instrumentable do
       include Metrics::Instrumentable
 
       def self.to_s
-        'Some::Module'
+        'SomeCrazy::Module'
       end
 
       def initialize
@@ -29,7 +29,7 @@ describe Metrics::Instrumentable do
 
   describe '#instrument' do
     it 'instruments the duration of the method' do
-      klass.any_instance.should_receive(:instrument).with('some.module.long_method').and_yield
+      klass.any_instance.should_receive(:instrument).with('some_crazy.module.long_method').and_yield
       expect(klass.new.long_method).to eq 'foo'
     end
 
