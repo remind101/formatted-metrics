@@ -1,4 +1,5 @@
 require 'rack/instrumentation'
+require 'metrics/core_ext'
 require 'metrics/railtie' if defined?(Rails)
 
 module Metrics

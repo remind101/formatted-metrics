@@ -38,7 +38,7 @@ module Metrics
       #
       # Returns a String namespace for the metric.
       def metric_namespace
-        to_s.gsub(/::/, '.').downcase
+        to_s.gsub(/::/, '.').underscore
       end
 
       # Public: Wraps the method with a call to instrument the duration of the
