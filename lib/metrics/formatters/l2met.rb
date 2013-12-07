@@ -57,7 +57,7 @@ module Metrics::Formatters
       end
 
       # Groups the array of measurements into an array of log lines, each line
-      # sourceed with the source.
+      # prefixed with the source.
       #
       # Example
       #
@@ -65,7 +65,7 @@ module Metrics::Formatters
       #   ['measure#rack.request=1', ..., 'measure#rack.request.time=200ms']
       #
       #   # Into this:
-      #   ['source=app measure#rack.request=1', ['measure#rack.request.time=200ms', ...]]
+      #   ['source=app measure#rack.request=1', 'source=app measure#rack.request.time=200ms', ...]
       #
       # Returns an Array.
       def lines
