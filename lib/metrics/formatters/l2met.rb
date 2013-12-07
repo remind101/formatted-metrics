@@ -1,7 +1,5 @@
 module Metrics::Formatters
   PRECISION = 3.freeze
-  MAX_LEN   = 1024.freeze
-  DELIMITER = ' '.freeze
 
   class L2Met < Base
     # Example
@@ -9,25 +7,12 @@ module Metrics::Formatters
     def lines
       groups.map do |source, instrumenters|
         prefix = "source=#{full_source(source)}"
-        max = MAX_LEN - prefix.length + DELIMITER.length * 2
-
         measurements = instrumenters.map { |instrumenter| measurement(instrumenter) }
-
-        limit_line_length(measurements, max).map { |_, line|
-          [prefix, line].join(DELIMITER)
-        }
+        Lines.new(prefix, measurements).lines
       end.flatten
     end
 
   private
-
-    def limit_line_length(measurements, max)
-      total = 0
-      measurements.chunk { |measurement|
-        total += measurement.length + DELIMITER.length * 2
-        total / max
-      }
-    end
 
     # Internal: We group the metrics by their source so that we can separate
     # the lines.
@@ -47,6 +32,40 @@ module Metrics::Formatters
 
     def blank?(string)
       string.nil? || string.empty?
+    end
+
+    # Responsible for taking a prefix, and an array of measurements, and
+    # returning an array of log lines that are limited to 1024 characters per
+    # line.
+    class Lines
+      include Enumerable
+
+      MAX_LEN   = 1024.freeze
+      DELIMITER = ' '.freeze
+
+      attr_reader :prefix
+      attr_reader :measurements
+      attr_reader :max
+
+      def initialize(prefix, measurements)
+        @prefix = prefix
+        @measurements = measurements
+        @max = MAX_LEN - prefix.length + DELIMITER.length * 2
+      end
+
+      def each(&block)
+        measurements.each(&block)
+      end
+
+      def lines
+        total = 0
+        chunk { |measurement|
+          total += measurement.length + DELIMITER.length * 2
+          total / max
+        }.map { |_, line|
+          [prefix, line].join(DELIMITER)
+        }
+      end
     end
   end
 end
