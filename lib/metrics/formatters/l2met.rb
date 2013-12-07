@@ -6,9 +6,8 @@ module Metrics::Formatters
     # source=web.2 sample#load_avg_1m=0.31 sample#load_avg_5m=0.10 sample#load_avg_15m=0.05
     def lines
       groups.map do |source, instrumenters|
-        prefix = "source=#{full_source(source)}"
         measurements = instrumenters.map { |instrumenter| measurement(instrumenter) }
-        Lines.new(prefix, measurements).lines
+        Lines.new(full_source(source), measurements).lines
       end.flatten
     end
 
@@ -43,27 +42,39 @@ module Metrics::Formatters
       MAX_LEN   = 1024.freeze
       DELIMITER = ' '.freeze
 
-      attr_reader :prefix
+      attr_reader :source
       attr_reader :measurements
       attr_reader :max
 
-      def initialize(prefix, measurements)
-        @prefix = prefix
+      def initialize(source, measurements)
+        @source = "source=#{source}"
         @measurements = measurements
-        @max = MAX_LEN - prefix.length + DELIMITER.length * 2
+        @max = MAX_LEN - @source.length + DELIMITER.length * 2
       end
 
       def each(&block)
         measurements.each(&block)
       end
 
+      # Groups the array of measurements into an array of log lines, each line
+      # sourceed with the source.
+      #
+      # Example
+      #
+      #   # This:
+      #   ['measure#rack.request=1', ..., 'measure#rack.request.time=200ms']
+      #
+      #   # Into this:
+      #   ['source=app measure#rack.request=1', ['measure#rack.request.time=200ms', ...]]
+      #
+      # Returns an Array.
       def lines
         total = 0
         chunk { |measurement|
           total += measurement.length + DELIMITER.length * 2
           total / max
         }.map { |_, line|
-          [prefix, line].join(DELIMITER)
+          [source, line].join(DELIMITER)
         }
       end
     end
