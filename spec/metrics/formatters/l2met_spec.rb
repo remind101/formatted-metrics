@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'securerandom'
 
 describe Metrics::Formatters::L2Met do
   let(:formatter) { described_class.new *instrumenters }
@@ -12,7 +13,7 @@ describe Metrics::Formatters::L2Met do
   end
 
   describe '.lines' do
-    subject(:format) { formatter.lines }
+    subject(:lines) { formatter.lines }
 
     context 'with a single instrumenter' do
       let(:instrumenters) { [ instrumenter(metric: 'rack.request.time', value: 10.3333, units: 'ms', type: 'sample') ] }
@@ -36,6 +37,18 @@ describe Metrics::Formatters::L2Met do
       end
 
       it { should eq ['source=app sample#rack.request.time=10ms', 'source=app.foo count#jobs.queued=15jobs count#jobs.busy=10jobs'] }
+    end
+
+    context 'with lots of metrics from the same source' do
+      let(:instrumenters) do
+        100.times.map { instrumenter(metric: SecureRandom.hex, value: rand(100), units: 'ms', type: 'sample') }
+      end
+
+      it 'limits each line to 1024 characters' do
+        lines.each do |line|
+          expect(line.length).to be < 1024
+        end
+      end
     end
   end
 end
