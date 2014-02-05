@@ -38,5 +38,23 @@ describe Metrics::Grouping do
 
       expect(group.instrumenters.first.metric).to eq 'rack.request.time'
     end
+
+    it 'allows for options to be passed' do
+      group = described_class.new 'rack', source: 'foo' do |group|
+        group.instrument 'request.time', 500, units: 'ms'
+      end
+
+      expect(group.instrumenters.first.options).to eq(source: 'foo', units: 'ms')
+    end
+
+    it 'allows for top level options to be passed to nested groups' do
+      group = described_class.new 'rack', source: 'foo' do |group|
+        group.group 'request' do |g|
+          g.instrument 'time', 500, units: 'ms'
+        end
+      end
+
+      expect(group.instrumenters.first.options).to eq(source: 'foo', units: 'ms')
+    end
   end
 end

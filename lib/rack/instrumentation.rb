@@ -16,7 +16,7 @@ module Rack
         response = @app.call(env)
         duration = (Time.now - time) * 1000.0
 
-        request_metrics 'rack.request', response.first, duration
+        request_metrics response.first, duration, metric: 'rack.request'
 
         response
       rescue Exception => raised

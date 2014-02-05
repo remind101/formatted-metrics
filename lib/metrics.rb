@@ -15,6 +15,16 @@ module Metrics
     autoload :L2Met,           'metrics/formatters/l2met'
   end
 
+  module Helpers
+    def self.extract_options!(options)
+      if options.last.is_a?(Hash)
+        options.pop
+      else
+        {}
+      end
+    end
+  end
+
   class << self
 
     # Public: Instrument a metric.

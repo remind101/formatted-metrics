@@ -4,8 +4,11 @@ module Metrics
   module MiddlewareHelpers
     private
 
-    def request_metrics(namespace, status, duration)
-      group namespace do |group|
+    def request_metrics(status, duration, options = {})
+      metric = options[:metric]
+      source = options[:source]
+
+      group metric, source: source do |group|
         group.instrument 'time', duration, units: 'ms'
 
         group.group 'status' do |group|

@@ -15,7 +15,7 @@ module Faraday
       response = @app.call(env)
       duration = (Time.now - time) * 1000.0
 
-      request_metrics metric, response.status, duration
+      request_metrics response.status, duration, metric: metric, source: env[:url]
 
       response
     end

@@ -11,7 +11,7 @@ module Metrics
   class Instrumenter
     TIME_UNITS = 'ms'.freeze
 
-    attr_reader :metric
+    attr_reader :metric, :options
 
     def self.instrument(*args, &block)
       instrument = new(*args, &block)
@@ -53,7 +53,7 @@ module Metrics
     end
 
   private
-    attr_reader :options, :block
+    attr_reader :block
 
     def timing?
       !block.nil?
@@ -68,11 +68,7 @@ module Metrics
     end
 
     def extract_options!(options)
-      if options.last.is_a?(Hash)
-        options.pop
-      else
-        {}
-      end
+      Metrics::Helpers.extract_options!(options)
     end
   end
 end
