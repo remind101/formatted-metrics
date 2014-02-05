@@ -15,13 +15,19 @@ module Faraday
       response = @app.call(env)
       duration = (Time.now - time) * 1000.0
 
-      request_metrics response.status, duration, metric: metric, source: env[:url].to_s
+      request_metrics response.status, duration, metric: metric, source: source(env)
 
       response
     end
 
   private
     attr_reader :options
+
+    def source(env)
+      method = env[:method]
+      path   = env[:url].path.gsub(/\//, '.')
+      "#{method}#{path}"
+    end
 
     def metric
       options[:metric]

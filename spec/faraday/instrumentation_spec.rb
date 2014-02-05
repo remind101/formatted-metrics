@@ -7,10 +7,15 @@ describe Faraday::Instrumentation do
   let(:middleware) { described_class.new(app) }
 
   describe '.call' do
-    let(:uri) { URI.parse('http://google.com') }
+    let(:uri) { URI.parse('http://google.com/v1/foo?param=1') }
 
-    it 'instruments the time it takes' do
+    it 'returns the response' do
       expect(middleware.call(url: uri)).to eq response
+    end
+
+    it 'sets the source' do
+      Metrics.should_receive(:group).with('faraday.request', source: 'get.v1.foo').and_call_original
+      expect(middleware.call(method: :get, url: uri)).to eq response
     end
   end
 end
