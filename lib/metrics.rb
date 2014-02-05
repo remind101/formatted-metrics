@@ -3,15 +3,16 @@ require 'metrics/core_ext'
 require 'metrics/railtie' if defined?(Rails)
 
 module Metrics
-  autoload :Configuration,  'metrics/configuration'
-  autoload :Instrumentable, 'metrics/instrumentable'
-  autoload :Instrumenter,   'metrics/instrumenter'
-  autoload :Grouping,       'metrics/grouping'
-  autoload :Handler,        'metrics/handler'
+  autoload :MiddlewareHelpers, 'metrics/middleware_helpers'
+  autoload :Configuration,     'metrics/configuration'
+  autoload :Instrumentable,    'metrics/instrumentable'
+  autoload :Instrumenter,      'metrics/instrumenter'
+  autoload :Grouping,          'metrics/grouping'
+  autoload :Handler,           'metrics/handler'
 
   module Formatters
-    autoload :Base,         'metrics/formatters/base'
-    autoload :L2Met,        'metrics/formatters/l2met'
+    autoload :Base,            'metrics/formatters/base'
+    autoload :L2Met,           'metrics/formatters/l2met'
   end
 
   class << self
