@@ -7,7 +7,7 @@ module Faraday
 
     def initialize(app, options = {})
       super(app)
-      @options = { metric: 'faraday.request' }.merge(options)
+      @options = { metric: 'faraday.request', path: false }.merge(options)
     end
 
     def call(env)
@@ -25,7 +25,7 @@ module Faraday
 
     def source(env)
       method = env[:method]
-      path   = env[:url].path.gsub(/\//, '.')
+      path   = options[:path] ? env[:url].path.gsub(/\//, '.') : ''
       "#{method}#{path}"
     end
 

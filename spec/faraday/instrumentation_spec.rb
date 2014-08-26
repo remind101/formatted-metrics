@@ -14,8 +14,17 @@ describe Faraday::Instrumentation do
     end
 
     it 'sets the source' do
-      Metrics.should_receive(:group).with('faraday.request', source: 'get.v1.foo').and_call_original
+      Metrics.should_receive(:group).with('faraday.request', source: 'get').and_call_original
       expect(middleware.call(method: :get, url: uri)).to eq response
+    end
+
+    describe 'with path: true' do
+      let(:middleware) { described_class.new(app, path: true) }
+
+      it 'includes the path in the source' do
+        Metrics.should_receive(:group).with('faraday.request', source: 'get.v1.foo').and_call_original
+        expect(middleware.call(method: :get, url: uri)).to eq response
+      end
     end
   end
 end
