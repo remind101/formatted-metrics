@@ -20,7 +20,7 @@ module Rack
 
         response
       rescue Exception => raised
-        instrument 'exception', 1, source: 'rack', type: 'count'
+        instrument 'rack.exception', 1, type: 'count'
         raise
       end
     end
