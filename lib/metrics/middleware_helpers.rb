@@ -25,8 +25,8 @@ module Metrics
       Metrics.instrument(*args, &block)
     end
 
-    def group(*args, &block)
-      Metrics.group(*args, &block)
+    def group(namespace, options, &block)
+      Metrics.group(namespace, options, &block)
     end
   end
 end

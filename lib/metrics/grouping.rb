@@ -3,9 +3,9 @@ module Metrics
   # instruments to output on a single line.
   class Grouping
     attr_reader :namespace, :instrumenters, :options
-    
-    def self.instrument(*args, &block)
-      new(*args, &block).instrumenters
+
+    def self.instrument(namespace = nil, options = {}, &block)
+      new(namespace, options, &block).instrumenters
     end
 
     def initialize(namespace = nil, options = {}, &block)

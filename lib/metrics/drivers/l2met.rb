@@ -1,11 +1,24 @@
-module Metrics::Formatters
+module Metrics::Drivers
   PRECISION = 3.freeze
 
-  class L2Met < Base
+  class L2Met
+    attr_reader :logger, :source_prefix
+    def initialize(logger, source_prefix)
+      @logger = logger
+      @source_prefix = source_prefix
+    end
+
+    def write(*instrumenters)
+      lines(instrumenters).each do |line|
+        logger.info line
+      end
+      instrumenters
+    end
+
     # Example
     # source=web.2 sample#load_avg_1m=0.31 sample#load_avg_5m=0.10 sample#load_avg_15m=0.05
-    def lines
-      groups.map do |source, instrumenters|
+    def lines(instrumenters)
+      groups(instrumenters).map do |source, instrumenters|
         measurements = instrumenters.map { |instrumenter| measurement(instrumenter) }
         Lines.new(full_source(source), measurements).lines
       end.flatten
@@ -15,12 +28,12 @@ module Metrics::Formatters
 
     # Internal: We group the metrics by their source so that we can separate
     # the lines.
-    def groups
+    def groups(instrumenters)
       instrumenters.group_by(&:source)
     end
 
     def full_source(source=nil)
-      [configuration.source, source].reject { |s| blank?(s) }.join('.')
+      [source_prefix, source].reject { |s| blank?(s) }.join('.')
     end
 
     def measurement(instrumenter)
