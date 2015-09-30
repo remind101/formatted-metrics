@@ -10,9 +10,10 @@ module Metrics
   autoload :Grouping,          'metrics/grouping'
   autoload :Handler,           'metrics/handler'
 
-  module Formatters
-    autoload :Base,            'metrics/formatters/base'
-    autoload :L2Met,           'metrics/formatters/l2met'
+  module Drivers
+    autoload :Base,            'metrics/drivers/base'
+    autoload :L2Met,           'metrics/drivers/l2met'
+    autoload :Statsd,          'metrics/drivers/statsd'
   end
 
   module Helpers
@@ -65,8 +66,9 @@ module Metrics
     #   end
     #
     # Returns nothing.
-    def group(*args, &block)
-      Handler.handle(Grouping.instrument(*args, &block))
+    def group(namespace = nil, options = {}, &block)
+      instrumenters = Grouping.instrument(namespace, &block)
+      Handler.handle(*instrumenters)
     end
 
     def subscribe

@@ -1,7 +1,7 @@
 module Metrics
 
   # Internal: Responsible for taking a list or an Array of
-  # Metrics::Instrumenters and passing them to the formatter.
+  # Metrics::Instrumenters and passing them to the driver.
   class Handler
     attr_reader :instrumenters
 
@@ -10,34 +10,27 @@ module Metrics
     end
 
     def initialize(*instrumenters)
-      @instrumenters = instrumenters.flatten
+      @instrumenters = instrumenters
     end
 
-    # Public: Writes all of the instrumenters to STDOUT using the formatter.
+    # Public: Writes all of the instrumenters to the driver.
     #
-    # Returns an Array of Metrics::Instrumenters that were written to STDOUT.
+    # Returns an Array of Metrics::Instrumenters that were written.
     def handle
-      write instrumenters
-      result
+      return write(*instrumenters)
     end
 
   private
+    def write(*instrumenters)
+      driver.write(*instrumenters)
+    end
 
-    def result
-      instrumenters.last.result
+    def driver
+      configuration.driver
     end
 
     def configuration
       Metrics.configuration
     end
-
-    def write(*args, &block)
-      formatter.write(*args, &block)
-    end
-
-    def formatter
-      configuration.formatter
-    end
-  
   end
 end

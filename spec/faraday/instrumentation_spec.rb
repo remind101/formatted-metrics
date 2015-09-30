@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'faraday/instrumentation'
 
 describe Faraday::Instrumentation do
+
   let(:response) { double('response', status: 200) }
   let(:app) { double('app', call: response) }
   let(:middleware) { described_class.new(app) }

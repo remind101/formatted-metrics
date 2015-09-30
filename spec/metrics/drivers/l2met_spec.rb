@@ -1,19 +1,15 @@
 require 'spec_helper'
 require 'securerandom'
 
-describe Metrics::Formatters::L2Met do
-  let(:formatter) { described_class.new *instrumenters }
-
-  before do
-    Metrics.configuration.stub source: 'app'
-  end
+describe Metrics::Drivers::L2Met do
+  let(:driver) { described_class.new(Logger.new('/dev/null'), 'app') }
 
   def instrumenter(values)
     double Metrics::Instrumenter, { source: nil, type: 'measure' }.merge(values)
   end
 
   describe '.lines' do
-    subject(:lines) { formatter.lines }
+    subject(:lines) { driver.lines(instrumenters) }
 
     context 'with a single instrumenter' do
       let(:instrumenters) { [ instrumenter(metric: 'rack.request.time', value: 10.3333, units: 'ms', type: 'sample') ] }
