@@ -17,10 +17,17 @@ module Metrics
     #
     # Returns an Array of Metrics::Instrumenters that were written.
     def handle
-      return write(*instrumenters)
+      write(*instrumenters)
+      return last_result
     end
 
   private
+    # The result of the last instrumenter. This is the return value of the
+    # block being instrumented.
+    def last_result
+      instrumenters.last.result
+    end
+
     def write(*instrumenters)
       driver.write(*instrumenters)
     end
