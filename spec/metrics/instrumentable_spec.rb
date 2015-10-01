@@ -33,6 +33,10 @@ describe Metrics::Instrumentable do
       expect(klass.new.long_method).to eq 'foo'
     end
 
+    it 'returns the return value of the original method' do
+      expect(klass.new.long_method).to eq 'foo'
+    end
+
     it 'sets the visibility of protected methods' do
       expect(klass.public_method_defined?(:long_method)).to be_true
     end

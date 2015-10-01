@@ -47,7 +47,7 @@ module Metrics
     #     yield
     #   end
     #
-    # Returns nothing.
+    # Returns the return value of the block.
     def instrument(*args, &block)
       Handler.handle(Instrumenter.instrument(*args, &block))
     end
