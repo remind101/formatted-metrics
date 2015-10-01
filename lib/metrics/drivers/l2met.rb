@@ -37,9 +37,11 @@ module Metrics::Drivers
     end
 
     def measurement(instrumenter)
+      type = instrumenter.type
+      type = 'measure' if type == 'histogram' # histogram not supported.
       value = instrumenter.value
       value = value.round(PRECISION) if value.is_a?(Float)
-      "#{instrumenter.type}##{instrumenter.metric}=#{value}#{instrumenter.units}"
+      "#{type}##{instrumenter.metric}=#{value}#{instrumenter.units}"
     end
 
     def blank?(string)

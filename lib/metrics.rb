@@ -9,6 +9,7 @@ module Metrics
   autoload :Instrumenter,      'metrics/instrumenter'
   autoload :Grouping,          'metrics/grouping'
   autoload :Handler,           'metrics/handler'
+  autoload :StatsdApi,         'metrics/statsd_api'
 
   module Drivers
     autoload :Base,            'metrics/drivers/base'
@@ -27,6 +28,7 @@ module Metrics
   end
 
   class << self
+    include StatsdApi
 
     # Public: Instrument a metric.
     #
