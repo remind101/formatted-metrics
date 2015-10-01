@@ -2,6 +2,8 @@ module Metrics
   # Public: Starts a new Grouping context, which allows for multiple
   # instruments to output on a single line.
   class Grouping
+    include StatsdApi
+
     attr_reader :namespace, :instrumenters, :options
 
     def self.instrument(namespace = nil, options = {}, &block)
@@ -16,7 +18,7 @@ module Metrics
     end
 
     def increment(metric)
-      instrument metric, 1, options.merge(type: 'count')
+      super(metric, options)
     end
 
     def instrument(metric, *args, &block)

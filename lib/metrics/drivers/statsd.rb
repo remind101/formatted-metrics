@@ -20,6 +20,8 @@ module Metrics::Drivers
       value = instrumenter.value
 
       case instrumenter.type
+      when 'histogram'
+        client.histogram(name, value)
       when 'measure', 'sample'
         if instrumenter.units == 'ms'
           client.timing(name, value)
