@@ -25,7 +25,7 @@ module Metrics
     # The result of the last instrumenter. This is the return value of the
     # block being instrumented.
     def last_result
-      instrumenters.last.result
+      instrumenters.last ? instrumenters.last.result : nil
     end
 
     def write(*instrumenters)
