@@ -46,6 +46,10 @@ module Metrics
       options[:source]
     end
 
+    def tags
+      options[:tags] || {}
+    end
+
     def result
       return nil unless block
       return @result if defined?(@result)
