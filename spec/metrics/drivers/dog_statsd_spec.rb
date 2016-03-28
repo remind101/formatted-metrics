@@ -22,8 +22,8 @@ describe Metrics::Drivers::DogStatsd do
       end
 
       it 'should pass a tag to the dogstatsd-ruby client' do
-        client.should_receive(:gauge).with('rack.request.size.source__app__', 10, tags: ['tag0:value0'])
-        write(instrumenter('rack.request.size', 10, type: 'measure', tags: {tag0: 'value0'}))
+        client.should_receive(:gauge).with('rack.request.size.source__app__', 10, tags: ['tag0:long_value_with_lots_of_whitespace'])
+        write(instrumenter('rack.request.size', 10, type: 'measure', tags: {tag0: 'long value with lots of whitespace'}))
       end
 
       it 'should pass multiple tags to the dogstatsd-ruby client' do
