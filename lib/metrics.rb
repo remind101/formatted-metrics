@@ -15,6 +15,7 @@ module Metrics
     autoload :Base,            'metrics/drivers/base'
     autoload :L2Met,           'metrics/drivers/l2met'
     autoload :Statsd,          'metrics/drivers/statsd'
+    autoload :DogStatsd,       'metrics/drivers/dog_statsd'
   end
 
   module Helpers

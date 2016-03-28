@@ -43,6 +43,19 @@ describe Metrics::Instrumenter do
     end
   end
 
+  describe '.tags' do
+    subject { instrumenter.tags }
+
+    context 'by default' do
+      it {should eq Hash.new }
+    end
+
+    context 'when specified' do
+      let(:instrumenter) { described_class.new('jobs.busy', 10, units: 'jobs', tags: {tag0: 'value0', tag1: 'value1'}) }
+      it {should eq({tag0: 'value0', tag1: 'value1'})}
+    end
+  end
+
   describe '.result' do
     subject { instrumenter.result }
 
