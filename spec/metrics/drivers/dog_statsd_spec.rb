@@ -27,8 +27,8 @@ describe Metrics::Drivers::DogStatsd do
       end
 
       it 'should pass multiple tags to the dogstatsd-ruby client' do
-        client.should_receive(:count).with('foo.bar.source__app__', 10, tags: ['tag0:value0', 'tag1:value1', 'tag2:value2'])
-        write(instrumenter('foo.bar', 10, type: 'count', tags: {tag0: 'value0', tag1: 'value1', tag2: 'value2'}))
+        client.should_receive(:count).with('foo.bar.source__app__', 10, tags: ['tag0:value0', 'tag1:a_tag_value', 'tag2:2222'])
+        write(instrumenter('foo.bar', 10, type: 'count', tags: {tag0: 'value0', tag1: :a_tag_value, tag2: 2222}))
       end
     end
 

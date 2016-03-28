@@ -25,7 +25,7 @@ module Metrics::Drivers
     private
 
     def formatted_tags(tags)
-      tags.map { |k, v| "%s:%s" % [k, v.tr(' ', '_')] }
+      tags.map { |k, v| "%s:%s" % [k, v.to_s.tr(' ', '_')] }
     end
 
   end
