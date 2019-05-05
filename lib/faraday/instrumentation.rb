@@ -12,12 +12,11 @@ module Faraday
 
     def call(env)
       time = Time.now
-      response = @app.call(env)
-      duration = (Time.now - time) * 1000.0
-
-      request_metrics response.status, duration, metric: metric, source: source(env)
-
-      response
+      @app.call(env).on_complete do |env|
+        duration = (Time.now - time) * 1000.0
+        response = env[:response]
+        request_metrics response.status, duration, metric: metric, source: source(env)
+      end
     end
 
   private
